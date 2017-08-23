@@ -1,1 +1,11 @@
-# boggle-solver
+# Boggle Solver
+## Author: Julia Edwards
+## Date: August 2017
+
+Finds all words in a 5x5 Boggle board that contain 4 or more letters using one of two word verification libraries (NLTK wordnet - http://www.nltk.org/_modules/nltk/corpus/reader/wordnet.html - or the Python Vocabulary library - https://pypi.python.org/pypi/Vocabulary). By default, NLTK wordnet is used to validate the words that the algorithm finds. 
+
+The algorithm utilizes a Prefix Trie to validate prefixes of potential words as it solves the grid. At run time, a function is called to attempt to load the Trie from the file "englishDictionary.trie". If it cannot find this file, it assumes that the Trie does not yet exist and creates a new one using the Python datrie library. The default implementation uses the built in spell-check dictionary on a Mac - found at /usr/share/dict/words - to construct the trie. This can be updated to point to any list of words that you'd like to use.
+
+Once the Trie is loaded, the solveBoggle() function can be called to solve the Boggle board. The solveBoggle() function takes an optional parameter - beThorough - to switch from using NLTK wordnet to the Python Vocabulary library for word validation. If True, the solver takes significantly longer and requires an Internet connection to validate words, but it does find a greater number of words than NLTK wordnet.
+
+solveBoggle() initializes a queue with Node objects that represent each of the letters on the board. While the queue still has Nodes left to explore, the Node at the head of the queue is popped and the prefixes that can be made using it and its neighbors are explored (keeping track of the neighbors that have already been used in the prefix, since you can't use the same square twice in a given word). These prefixes are validated using the Trie that was loaded (or created) at run time, and any 4+ letter prefixes are checked to see if they are real words. The valid neighbors and any real words that are found are returned, and the valid neighbors are added to the end of the queue. Once the queue is empty and exploration is complete, the words that were found during the exploration of the nodes are returned as the output for solveBoggle().
